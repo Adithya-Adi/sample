@@ -1,21 +1,21 @@
 const express = require('express');
 require("./startup/db")()
 const app = express();
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser')
 app.use(express.json());
 const {User}=require("./models/user")
 
-app.use(bodyParser.json())
+// app.use(bodyParser.json())
 //Imports Routes
 const postsRoute = require('./routes/posts')
 app.use('/posts', postsRoute)
-
 
 const courses = [
     {id: 1, name: 'course1'},
     {id: 2, name: 'course2'},
     {id: 3, name: 'course3'}
 ];
+
 app.get('/',async(req,res)=>{
     const result=await User.find()
     res.send(result) 
