@@ -5,6 +5,9 @@ const app = express();
 app.use(express.json());
 const {User}=require("./models/user")
 
+//middleware
+app.use(logger);
+
 // app.use(bodyParser.json())
 //Imports Routes
 const postsRoute = require('./routes/posts')
@@ -16,9 +19,14 @@ const courses = [
     {id: 3, name: 'course3'}
 ];
 
-app.get('/',async(req,res)=>{
+app.get('/:id',async(req,res)=>{
+    try{
     const result=await User.find()
     res.send(result) 
+    }catch(err){
+        res.json({message:err})
+    }
+   
 });
 app.get('/posts',(req,res)=>{
     res.send('hii....');
@@ -37,6 +45,7 @@ app.get('/courses/:id',(req,res)=>{
 });
 
 
+
 app.post("/", async(req,res)=>{
     const {name}=req.body
     const user=new User({name})
@@ -44,5 +53,10 @@ app.post("/", async(req,res)=>{
     res.send(result)
 })
 
+
+function logger(req,res,next){
+    console.log('Log')
+    next()
+}
 const port = process.env.PORT || 3000;
 app.listen(port,()=>console.log(`connected to port ${port}`));
